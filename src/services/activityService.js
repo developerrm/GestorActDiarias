@@ -6,7 +6,17 @@ export const activityService = {
     try {
       const response = await fetch(`${API_URL}/activities`);
       if (!response.ok) throw new Error('Error al obtener actividades');
-      return await response.json();
+       const data = await response.json();
+
+    // NORMALIZACIÓN
+    return data.map(a => ({
+      id: a.id,
+      description: a.description,
+      date: a.activityDate.split('T')[0],   // YYYY-MM-DD
+      createdAt: a.createdAt,
+      updatedAt: a.updatedAt
+    }));
+    
     } catch (error) {
       console.error('Error en getActivities:', error);
       throw error;
