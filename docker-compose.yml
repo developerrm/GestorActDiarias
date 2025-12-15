@@ -1,0 +1,43 @@
+version: '3.8'
+
+services:
+  # Servicio de la aplicación React
+  gestor-app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: gestor-actividades-app
+    ports:
+      - "3000:3000"
+    environment:
+      - VITE_API_URL=http://localhost:3001/api
+    restart: unless-stopped
+    networks:
+      - gestor-network
+    depends_on:
+      - gestor-api
+
+  # Servicio de API (placeholder para tu backend)
+  gestor-api:
+    image: node:20-alpine
+    container_name: gestor-actividades-api
+    working_dir: /app
+    environment:
+      - NODE_ENV=production
+      - PORT=3001
+    ports:
+      - "3001:3001"
+    restart: unless-stopped
+    networks:
+      - gestor-network
+    # Descomentar cuando tengas tu API lista
+    # build:
+    #   context: ./api
+    #   dockerfile: Dockerfile
+    # volumes:
+    #   - ./api:/app
+    #   - /app/node_modules
+
+networks:
+  gestor-network:
+    driver: bridge
